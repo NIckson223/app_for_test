@@ -54,6 +54,7 @@ line6.addWidget(btn_clean)
 edit_layout.addLayout(line6)
 
 stat_title =QLabel('Статистика')
+stat_title.setStyleSheet("font-weight:bold")
 amount_atempt = QLabel('Разів відповіли')
 amount_correct = QLabel('Вірних відповідей')
 sucsessful = QLabel('Успішність')
