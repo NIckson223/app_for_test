@@ -3,7 +3,8 @@ from PyQt5.QtWidgets import (QApplication,QSpinBox, QWidget, QPushButton,
                             QLabel, QHBoxLayout,QVBoxLayout, QRadioButton, QButtonGroup,
                              QGroupBox)
 
-app = QApplication([])
+from memo_app import app
+
 main_win = QWidget()
 main_win.setWindowTitle("Тестування")
 main_win.resize(400,400)
@@ -61,7 +62,20 @@ layout_card.addLayout(layout_line2)
 layout_card.addLayout(layout_line3)
 layout_card.addLayout(layout_line4)
 
-main_win.setLayout(layout_card)
 
-main_win.show()
-app.exec_()
+def show_result():
+    RadioGroupBox.hide()
+    btn_Ok.setText('Наступне питання')
+
+
+def show_question():
+    RadioGroupBox.show()
+    btn_Ok.setText('Відповісти')
+    rbtn_1.setChecked(False)
+    rbtn_2.setChecked(False)
+    rbtn_3.setChecked(False)
+    rbtn_4.setChecked(False)
+    RadioGroup.setExclusive(True)
+
+
+

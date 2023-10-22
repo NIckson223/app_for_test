@@ -1,5 +1,5 @@
 from PyQt5.QtCore import QAbstractListModel, QModelIndex, Qt
-from random import randint
+from random import randint,shuffle
 
 class Question():
     def __init__(self,question,answer,wrong_answer1,wrong_answer2,wrong_answer3):
@@ -67,6 +67,11 @@ class QuestionEdit(QuestionView):
 
         self.set_connects()
 
+
+text_correct = 'Вірно'
+text_wrong= 'Невірно'
+
+
 class AnswerCheck(QuestionView):
     def __init__(self, frm_model, question, answer, wrong_answer1, wrong_answer2, wrong_answer3, showed_answer,result):
         QuestionView.__init__(self, frm_model=frm_model,question= question, answer= answer,wrong_answer1=wrong_answer1,
@@ -74,6 +79,16 @@ class AnswerCheck(QuestionView):
         self.showed_answer = showed_answer
         self.result = result
 
+    def check(self):
+        if self.answer.isChecked():
+            self.result.settext(text_correct)
+            self.showed_answer.setText(self.frm_model.answer)
+            self.frm_model.got_right()
+
+        else:
+            self.result.settext(text_wrong)
+            self.showed_answer.setText(self.frm_model.answer)
+            self.frm_model.got_wrong()
 
 class QuestionListModel (QAbstractListModel):
     def __init__(self, parent=None):
@@ -87,3 +102,31 @@ class QuestionListModel (QAbstractListModel):
         if role == Qt.DisplayRole:
             form = self.form_list[ index_row()]
             return  form.question
+
+    def insertRows(self, parent=QModelIndex()):
+        position = len(self.form_list)
+        self.beginInsertRows(parent,position,position)
+        self.form_list.append(position)
+        self.endInsertRows()
+        return True
+
+    def removeRows(self,position, parent=QModelIndex()):
+        self.beginRemoveRows(parent,position,position)
+        self.form_list.pop(position)
+        self.endRemoveRows()
+        return True
+
+    def random_question(self):
+        total = len(self.form_list)
+        current = randint(0 ,total-1)
+        return self.form_list[current]
+
+
+def random_AnswerCheck(list_model, w_question,widgets_list,w_showed_answer,w_result):
+    frm =list_model.random_question()
+    shuffle(widgets_list)
+    frm_card=AnswerCheck(frm,w_question,widgets_list[0],widgets_list[1],widgets_list[2], widgets_list[3],w_showed_answer, w_result)
+    return frm_card
+
+
+
